@@ -153,11 +153,142 @@
 		h6 {
 			color: #f8fafc !important;
 		}
+
+		/* ── Edge Shine / Border Beam Effect ── */
+		.edge-shine {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: 9999;
+			overflow: hidden;
+		}
+
+		/* Corner glows that pulse subtly */
+		.edge-shine .corner {
+			position: absolute;
+			width: 220px;
+			height: 220px;
+			border-radius: 50%;
+			filter: blur(60px);
+			opacity: 0;
+			transition: opacity 0.6s ease;
+		}
+
+		.edge-shine .corner-tl {
+			top: -80px;
+			left: -80px;
+			background: radial-gradient(circle, rgba(45, 212, 191, 0.4) 0%, transparent 70%);
+		}
+
+		.edge-shine .corner-tr {
+			top: -80px;
+			right: -80px;
+			background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 70%);
+		}
+
+		.edge-shine .corner-bl {
+			bottom: -80px;
+			left: -80px;
+			background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, transparent 70%);
+		}
+
+		.edge-shine .corner-br {
+			bottom: -80px;
+			right: -80px;
+			background: radial-gradient(circle, rgba(45, 212, 191, 0.35) 0%, transparent 70%);
+		}
+
+		/* Animated border beam that travels along edges */
+		.edge-shine .beam {
+			position: absolute;
+			background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.5), rgba(59, 130, 246, 0.5), transparent);
+			filter: blur(3px);
+			opacity: 0;
+			transition: opacity 0.4s ease;
+		}
+
+		.edge-shine .beam-top {
+			top: 0;
+			left: 0;
+			height: 2px;
+			width: 100%;
+			animation: beamMoveH 4s linear infinite;
+		}
+
+		.edge-shine .beam-bottom {
+			bottom: 0;
+			left: 0;
+			height: 2px;
+			width: 100%;
+			animation: beamMoveH 4s linear infinite reverse;
+		}
+
+		.edge-shine .beam-left {
+			top: 0;
+			left: 0;
+			width: 2px;
+			height: 100%;
+			background: linear-gradient(180deg, transparent, rgba(45, 212, 191, 0.5), rgba(99, 102, 241, 0.5), transparent);
+			animation: beamMoveV 4s linear infinite;
+		}
+
+		.edge-shine .beam-right {
+			top: 0;
+			right: 0;
+			width: 2px;
+			height: 100%;
+			background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.5), rgba(45, 212, 191, 0.5), transparent);
+			animation: beamMoveV 4s linear infinite reverse;
+		}
+
+		/* Mouse-following edge glow */
+		.edge-shine .mouse-glow {
+			position: absolute;
+			width: 300px;
+			height: 300px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(45, 212, 191, 0.25) 0%, rgba(59, 130, 246, 0.15) 40%, transparent 70%);
+			filter: blur(40px);
+			pointer-events: none;
+			transform: translate(-50%, -50%);
+			transition: opacity 0.3s ease;
+			opacity: 0;
+		}
+
+		@keyframes beamMoveH {
+			0% { background-position: -200% 0; }
+			100% { background-position: 200% 0; }
+		}
+
+		@keyframes beamMoveV {
+			0% { background-position: 0 -200%; }
+			100% { background-position: 0 200%; }
+		}
+
+		.edge-shine.active .corner { opacity: 1; }
+		.edge-shine.active .beam { opacity: 1; }
+		.edge-shine.active .mouse-glow { opacity: 1; }
 	</style>
 </head>
 
 <body class="is-preload">
 	<div id="particles-js"></div>
+
+	<!-- Edge Shine Effect -->
+	<div class="edge-shine active" id="edgeShine">
+		<div class="corner corner-tl"></div>
+		<div class="corner corner-tr"></div>
+		<div class="corner corner-bl"></div>
+		<div class="corner corner-br"></div>
+		<div class="beam beam-top"></div>
+		<div class="beam beam-bottom"></div>
+		<div class="beam beam-left"></div>
+		<div class="beam beam-right"></div>
+		<div class="mouse-glow" id="mouseGlow"></div>
+	</div>
 
 	<!-- Header -->
 	<header id="header" class="relative z-50 pt-0">
@@ -274,12 +405,13 @@
 		<section id="two" class="fade-in">
 			<h2>Recent Projects</h2>
 			<div class="row gtr-uniform">
+				<!-- 1. HealixPharm -->
 				<article class="col-6 col-12-xsmall flex">
 					<div
 						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
-						<a href="https://github.com/MLiyanage2005" target="_blank"
+						<a href="https://github.com/Iqbaal-pro/HealixPharm" target="_blank"
 							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
-							<img src="images/thumbs/01.jpg" alt="HealixPharm"
+							<img src="images/thumbs/01.png" alt="HealixPharm"
 								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
 						</a>
 						<div class="flex-grow">
@@ -297,35 +429,84 @@
 						</ul>
 					</div>
 				</article>
+				<!-- 2. OMI Predictor -->
+				<article class="col-6 col-12-xsmall flex">
+					<div
+						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
+						<a href="https://github.com/MLiyanage2005/Omi-predictor" target="_blank"
+							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
+							<img src="images/thumbs/04.png" alt="OMI Predictor"
+								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
+						</a>
+						<div class="flex-grow">
+							<h3 class="text-xl font-bold text-white mb-3">OMI Predictor</h3>
+							<p class="text-sm text-slate-300 tracking-wide leading-relaxed mb-4">Built an image
+								processing classification system using OpenCV and ML models, developed backend with
+								FastAPI for handling image workflows.<br /><br /><span
+									class="text-teal-400 font-mono text-xs block bg-slate-950/50 p-3 rounded-lg border border-teal-400/20">Tech:
+									Python, FastAPI, OpenCV, Scikit-learn, Pandas, NumPy</span></p>
+						</div>
+						<ul class="actions small mt-auto pt-4 border-t border-white/10 w-full flex justify-end">
+							<li><a href="https://github.com/MLiyanage2005/Omi-predictor" target="_blank"
+									class="button small">View on GitHub</a></li>
+						</ul>
+					</div>
+				</article>
+				<!-- 3. SmartCampus REST API System -->
+				<article class="col-6 col-12-xsmall flex">
+					<div
+						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
+						<a href="https://github.com/MLiyanage2005/SmartCampusAPI" target="_blank"
+							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
+							<img src="images/thumbs/05.png" alt="SmartCampus REST API"
+								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
+						</a>
+						<div class="flex-grow">
+							<h3 class="text-xl font-bold text-white mb-3">SmartCampus REST API System</h3>
+							<p class="text-sm text-slate-300 tracking-wide leading-relaxed mb-4">Developed a RESTful API
+								to manage rooms, sensors, and readings with CRUD operations, filtering, and sub-resources.
+								Implemented business rule validation, centralized error handling, and request/response
+								logging, deployed on Apache Tomcat.<br /><br /><span
+									class="text-emerald-400 font-mono text-xs block bg-slate-950/50 p-3 rounded-lg border border-emerald-400/20">Tech:
+									Java, JAX-RS (Jersey), Apache Tomcat, Maven, Postman</span></p>
+						</div>
+						<ul class="actions small mt-auto pt-4 border-t border-white/10 w-full flex justify-end">
+							<li><a href="https://github.com/MLiyanage2005/SmartCampusAPI" target="_blank"
+									class="button small">View on GitHub</a></li>
+						</ul>
+					</div>
+				</article>
+				<!-- 4. ML Loan Prediction System -->
+				<article class="col-6 col-12-xsmall flex">
+					<div
+						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
+						<a href="https://github.com/MLiyanage2005/Loan-Approval-and-Amount-Prediction" target="_blank"
+							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
+							<img src="images/thumbs/06.png" alt="ML Loan Prediction"
+								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
+						</a>
+						<div class="flex-grow">
+							<h3 class="text-xl font-bold text-white mb-3">Machine Learning Loan Prediction System</h3>
+							<p class="text-sm text-slate-300 tracking-wide leading-relaxed mb-4">Built a dual-stage ML
+								pipeline to predict loan approval and estimate loan amounts. Performed data cleaning,
+								feature engineering, and exploratory analysis, and implemented optimized classification
+								and regression models with interpretable outputs.<br /><br /><span
+									class="text-violet-400 font-mono text-xs block bg-slate-950/50 p-3 rounded-lg border border-violet-400/20">Tech:
+									Python, Scikit-learn, Pandas, NumPy, Matplotlib, Seaborn</span></p>
+						</div>
+						<ul class="actions small mt-auto pt-4 border-t border-white/10 w-full flex justify-end">
+							<li><a href="https://github.com/MLiyanage2005/Loan-Approval-and-Amount-Prediction" target="_blank"
+									class="button small">View on GitHub</a></li>
+						</ul>
+					</div>
+				</article>
+				<!-- 5. Post & Comment REST API -->
 				<article class="col-6 col-12-xsmall flex">
 					<div
 						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
 						<a href="https://github.com/MLiyanage2005" target="_blank"
 							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
-							<img src="images/thumbs/02.jpg" alt="Medical Management System"
-								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
-						</a>
-						<div class="flex-grow">
-							<h3 class="text-xl font-bold text-white mb-3">Medical Management System</h3>
-							<p class="text-sm text-slate-300 tracking-wide leading-relaxed mb-4">Designed a desktop
-								application using OOP principles, implemented GUI, database connectivity, and full CRUD
-								operations.<br /><br /><span
-									class="text-blue-400 font-mono text-xs block bg-slate-950/50 p-3 rounded-lg border border-blue-400/20">Tech:
-									Java, Java Swing, JDBC, MySQL</span></p>
-						</div>
-						<ul class="actions small mt-auto pt-4 border-t border-white/10 w-full flex justify-end">
-							<li><a href="https://github.com/MLiyanage2005/Medical-center-management-system"
-									target="_blank" class="button small">View on
-									GitHub</a></li>
-						</ul>
-					</div>
-				</article>
-				<article class="col-6 col-12-xsmall flex">
-					<div
-						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
-						<a href="https://github.com/MLiyanage2005/Medical-center-management-system" target="_blank"
-							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
-							<img src="images/thumbs/03.jpg" alt="Post & Comment REST API"
+							<img src="images/thumbs/03.png" alt="Post & Comment REST API"
 								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
 						</a>
 						<div class="flex-grow">
@@ -342,25 +523,26 @@
 						</ul>
 					</div>
 				</article>
+				<!-- 6. Medical Management Center -->
 				<article class="col-6 col-12-xsmall flex">
 					<div
 						class="work-item w-full flex flex-col justify-between bg-gradient-to-br from-slate-800/80 to-slate-900/90 p-6 rounded-2xl border border-white/5 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:-translate-y-2 hover:shadow-[0_8px_30px_rgba(45,212,191,0.2)] transition-all duration-300">
-						<a href="https://github.com/MLiyanage2005" target="_blank"
+						<a href="https://github.com/MLiyanage2005/Medical-center-management-system" target="_blank"
 							class="image fit thumb mb-5 overflow-hidden rounded-xl group block">
-							<img src="images/thumbs/04.jpg" alt="OMI Project"
+							<img src="images/thumbs/02.png" alt="Medical Management Center"
 								class="w-full transform group-hover:scale-105 transition-transform duration-500" />
 						</a>
 						<div class="flex-grow">
-							<h3 class="text-xl font-bold text-white mb-3">OMI Vision Project</h3>
-							<p class="text-sm text-slate-300 tracking-wide leading-relaxed mb-4">Built an image
-								processing classification system using OpenCV and ML models, developed backend with
-								FastAPI for handling image workflows.<br /><br /><span
-									class="text-teal-400 font-mono text-xs block bg-slate-950/50 p-3 rounded-lg border border-teal-400/20">Tech:
-									Python, FastAPI, OpenCV, Scikit-learn, Pandas, NumPy</span></p>
+							<h3 class="text-xl font-bold text-white mb-3">Medical Management Center</h3>
+							<p class="text-sm text-slate-300 tracking-wide leading-relaxed mb-4">Designed a desktop
+								application using OOP principles, implemented GUI, database connectivity, and full CRUD
+								operations.<br /><br /><span
+									class="text-blue-400 font-mono text-xs block bg-slate-950/50 p-3 rounded-lg border border-blue-400/20">Tech:
+									Java, Java Swing, JDBC, MySQL</span></p>
 						</div>
 						<ul class="actions small mt-auto pt-4 border-t border-white/10 w-full flex justify-end">
-							<li><a href="https://github.com/MLiyanage2005/Omi-predictor" target="_blank"
-									class="button small">View on
+							<li><a href="https://github.com/MLiyanage2005/Medical-center-management-system"
+									target="_blank" class="button small">View on
 									GitHub</a></li>
 						</ul>
 					</div>
@@ -905,6 +1087,76 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 			};
 			next();
 		}
+	</script>
+
+	<!-- Edge Shine Mouse Tracking -->
+	<script>
+		(function() {
+			const glow = document.getElementById('mouseGlow');
+			const edgeShine = document.getElementById('edgeShine');
+			const EDGE_THRESHOLD = 120; // pixels from edge to activate glow
+
+			if (!glow || !edgeShine) return;
+
+			let isNearEdge = false;
+			let rafId = null;
+			let mouseX = 0, mouseY = 0;
+
+			document.addEventListener('mousemove', function(e) {
+				mouseX = e.clientX;
+				mouseY = e.clientY;
+
+				const w = window.innerWidth;
+				const h = window.innerHeight;
+
+				// Check if mouse is near any edge
+				const nearLeft = mouseX < EDGE_THRESHOLD;
+				const nearRight = mouseX > w - EDGE_THRESHOLD;
+				const nearTop = mouseY < EDGE_THRESHOLD;
+				const nearBottom = mouseY > h - EDGE_THRESHOLD;
+
+				isNearEdge = nearLeft || nearRight || nearTop || nearBottom;
+
+				if (isNearEdge) {
+					glow.style.left = mouseX + 'px';
+					glow.style.top = mouseY + 'px';
+					glow.style.opacity = '1';
+
+					// Intensify the nearest corner
+					const corners = edgeShine.querySelectorAll('.corner');
+					corners.forEach(c => c.style.opacity = '0.3');
+
+					if (nearTop && nearLeft) corners[0].style.opacity = '1';
+					if (nearTop && nearRight) corners[1].style.opacity = '1';
+					if (nearBottom && nearLeft) corners[2].style.opacity = '1';
+					if (nearBottom && nearRight) corners[3].style.opacity = '1';
+					if (nearTop && !nearLeft && !nearRight) { corners[0].style.opacity = '0.6'; corners[1].style.opacity = '0.6'; }
+					if (nearBottom && !nearLeft && !nearRight) { corners[2].style.opacity = '0.6'; corners[3].style.opacity = '0.6'; }
+					if (nearLeft && !nearTop && !nearBottom) { corners[0].style.opacity = '0.6'; corners[2].style.opacity = '0.6'; }
+					if (nearRight && !nearTop && !nearBottom) { corners[1].style.opacity = '0.6'; corners[3].style.opacity = '0.6'; }
+				} else {
+					glow.style.opacity = '0';
+					const corners = edgeShine.querySelectorAll('.corner');
+					corners.forEach(c => c.style.opacity = '0.3');
+				}
+			});
+
+			document.addEventListener('mouseleave', function() {
+				glow.style.opacity = '0';
+			});
+
+			// Pulse corners gently on scroll
+			let scrollTimer;
+			window.addEventListener('scroll', function() {
+				edgeShine.classList.add('active');
+				const corners = edgeShine.querySelectorAll('.corner');
+				corners.forEach(c => c.style.opacity = '0.7');
+				clearTimeout(scrollTimer);
+				scrollTimer = setTimeout(() => {
+					corners.forEach(c => c.style.opacity = '0.3');
+				}, 600);
+			});
+		})();
 	</script>
 
 </body>
